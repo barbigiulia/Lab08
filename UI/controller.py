@@ -12,13 +12,13 @@ class Controller:
         self._idMap = {}
         self.fillIDMap()
 
+    # BOTTONE
     def handleWorstCase(self, e):
         # TO FILL
         pass
 
-    def fillDD(self):
+    def fillDD(self):  # CREA LA LISTA DEI NOMI DEL MENU A TENDINA --> NERC
         nercList = self._model.listNerc
-
         for n in nercList:
             self._view._ddNerc.options.append(ft.dropdown.Option(n))
         self._view.update_page()

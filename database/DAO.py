@@ -8,13 +8,14 @@ class DAO():
         pass
 
     @staticmethod
-    def getAllNerc():
+    def getAllNerc():  # RIEMPE IL DROPDOWN
         conn = DBConnect.get_connection()
 
         result = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """ ADD YOUR QUERY """
+        query = """ select *
+                    from nerc n  """
 
         cursor.execute(query)
 
@@ -32,10 +33,13 @@ class DAO():
         result = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """ ADD YOUR QUERY """
+        query = """ select *
+                    from poweroutages
+                    where nerc_id = %s"""
 
         cursor.execute(query, (nerc.id,))
 
+        # TRASFORMO LE RIGHE DB IN OGGETTI PYTHON (ORM manuale)
         for row in cursor:
             result.append(
                 Event(row["id"], row["event_type_id"],
