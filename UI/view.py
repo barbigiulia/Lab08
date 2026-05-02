@@ -31,7 +31,9 @@ class View(ft.UserControl):
 
     def load_interface(self):
         # title
-        self._title = ft.Text("TdP 2024 - Insurance Unit", color="blue", size=24)
+        self._title = ft.Text("TdP 2024 - Insurance Unit",
+                              color="blue",
+                              size=24)
         self._page.controls.append(self._title)
 
         # ROW with controls
@@ -46,7 +48,8 @@ class View(ft.UserControl):
 
         self._txtYears = ft.TextField(label="Insert max years")
         self._txtHours = ft.TextField(label="Insert max hours")
-        self._btnWorstCase = ft.ElevatedButton(text="Worst-Case analysis", on_click=self._controller.handleWorstCase)
+        self._btnWorstCase = ft.ElevatedButton(text="Worst-Case analysis",
+                                               on_click=self._controller.handleWorstCase)
 
         row1 = ft.Row([
             ft.Column([self._logo]),
@@ -57,9 +60,9 @@ class View(ft.UserControl):
         self._controller.fillDD()
 
         #TextOutput
-        self._txtOut = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
+        self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
 
-        self._page.add(self._txtOut)
+        self._page.add(self.txt_result)
 
         self._page.update()
 

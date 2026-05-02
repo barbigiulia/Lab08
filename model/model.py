@@ -19,6 +19,7 @@ class Model:
         # li filtra in base al nerc_id
         self._listEvents = DAO.getAllEvents(nerc)
 
+
     def loadNerc(self):
         self._listNerc = DAO.getAllNerc()   # per il menu a tendina (NERC)
 
@@ -30,9 +31,8 @@ class Model:
         # 1) carica gli eventi del nerc scelto (nerc_id)
         # 2) inizia la ricorsione
         # 3) salva la soluzione migliore
-        self._listEvents = self.loadEvents(nerc) # lista eventi
-        # reset della miglior soluzione (ogni click riparte da zero)
-        self._solBest = [ ]
+        self.loadEvents(nerc) # lista eventi
+        self._solBest = [ ]   # reset della miglior soluzione (ogni click riparte da zero)
         self.ricorsione([], maxY, maxH, 0)
         return self._solBest
 
@@ -44,20 +44,21 @@ class Model:
         # pos = quale evento sto considerando
         # maxY = limite di ore max consentito
         # maxH = limite di anni
-        # 1) passo al prox evento --> ricorsione (parziale, pos+1)
+        # 1) non prendo l'evento, passo al prox --> ricorsione (parziale, pos+1)
         # 2) prendo l'evento --> lo aggiungo, controllo vincoli e se valido continuo
-        #    parziale +evento
+        #    ricorsione(parziale+evento, ..., pos+1)
         #    ricorsione(...)
 
         # mi fermo quando pos== numero di eventi (da esaminare)
         if pos == len(self._listEvents):
             # quando ho deciso su tutti gli eventi valuto la soluzione parziale!
-            # ora controllo le oreTot, rangeAnni e clientiTot
+            # controllo le oreTot, rangeAnni e clientiTot
             # se valido --> confronto con migliore
             if self.isValid(parziale, maxY, maxH):
-                if self.totalCustormers(parziale) > self.totalCustomers(self._solBest):
+                if self.totalCustomers(parziale) > self.totalCustomers(self._solBest):
                     self._solBest = copy.deepcopy(parziale)
             return
+
         # 1) RAMO : NON PRENDO L'EVENTO
         self.ricorsione(parziale, maxY, maxH, pos+1)  #aggiorno la posizione
 
@@ -87,14 +88,28 @@ class Model:
 
         return True
 
+# evento.date_event_finished - evento.date_event_began  --> OGGETTO timedelta
+# sarebbe 2 gg, 5 ore, 30 min...
+# timedelta.total_seconds() --> prende i secondi totali
+# divido poi per 3600 s
+# ottengo le ore
+
+
     def totalCustomers(self, soluzione):
         total = 0
         for evento in soluzione:
             total += evento.customers_affected
         return total
 
-
-
+    def totalHours(self, soluzione):
+        total = 0
+        for evento in soluzione:
+            delta  = (evento.date_event_finished - evento.date_event_began)
+            hours = delta.days*24 +delta.seconds/3600
+            # da giorni ad ore
+            # da secondi ad ore
+            total += hours
+        return total
 
         # property per UI
     @property

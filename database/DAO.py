@@ -8,7 +8,7 @@ class DAO():
         pass
 
     @staticmethod
-    def getAllNerc():  # RIEMPE IL DROPDOWN
+    def getAllNerc():  # RIEMPIE IL DROPDOWN
         conn = DBConnect.get_connection()
 
         result = []
